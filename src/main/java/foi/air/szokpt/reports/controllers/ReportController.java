@@ -22,11 +22,11 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    @GetMapping("/success")
+    @GetMapping("/successful-transactions")
     public ResponseEntity<ApiResponse<SuccessReportData>> successReport(){
         SuccessReportData data = reportService.getSuccessReport();
         return ResponseEntity.status(HttpStatus.OK).body(
-                ApiResponseUtil.successWithData("Succesful login", data)
+                ApiResponseUtil.successWithData("Successful login", data)
         );
     }
 
