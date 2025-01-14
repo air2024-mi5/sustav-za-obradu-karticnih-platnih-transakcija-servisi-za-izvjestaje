@@ -1,81 +1,179 @@
 package foi.air.szokpt.reports.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import foi.air.szokpt.reports.enums.CardBrand;
+import foi.air.szokpt.reports.enums.InstallmentsCreditor;
+import foi.air.szokpt.reports.enums.TrxType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-public class Transaction{
-    private CardType cardType;
-    private String cardNumber;
-    private String transactionNumber;
-    private Double amount;
-    private LocalDateTime dateTime;
-    private TransactionType transactionType;
-    private boolean success;
+public class Transaction {
+    @JsonProperty("guid")
+    private UUID guid;
 
-    public Transaction(CardType cardType, String cardNumber, String transactionNumber,
-                       Double amount, String dateTimeStr, TransactionType transactionType, boolean success) {
-        this.cardType = cardType;
-        this.cardNumber = cardNumber;
-        this.transactionNumber = transactionNumber;
+    @JsonProperty("amount")
+    private BigDecimal amount;
+
+    @JsonProperty("currency")
+    private String currency;
+
+    @JsonProperty("trx_type")
+    @Enumerated(EnumType.STRING)
+    private TrxType trxType;
+
+    @JsonProperty("installments_number")
+    private int installmentsNumber;
+
+    @JsonProperty("installments_creditor")
+    @Enumerated(EnumType.STRING)
+    private InstallmentsCreditor installmentsCreditor;
+
+    @JsonProperty("card_brand")
+    @Enumerated(EnumType.STRING)
+    private CardBrand cardBrand;
+
+    @JsonProperty("transaction_timestamp")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime transactionTimestamp;
+
+    @JsonProperty("masked_pan")
+    private String maskedPan;
+
+    @JsonProperty("pin_used")
+    private boolean pinUsed;
+
+    @JsonProperty("response_code")
+    private String responseCode;
+
+    @JsonProperty("approval_code")
+    private String approvalCode;
+
+    @JsonProperty("processed")
+    private Boolean processed;
+
+    public Transaction(UUID guid, BigDecimal amount, String currency, TrxType trxType, int installmentsNumber, InstallmentsCreditor installmentsCreditor, CardBrand cardBrand, LocalDateTime transactionTimestamp, String maskedPan, boolean pinUsed, String responseCode, String approvalCode, Boolean processed) {
+        this.guid = guid;
         this.amount = amount;
-        this.dateTime = LocalDateTime.parse(dateTimeStr);
-        this.transactionType = transactionType;
-        this.success = success;
+        this.currency = currency;
+        this.trxType = trxType;
+        this.installmentsNumber = installmentsNumber;
+        this.installmentsCreditor = installmentsCreditor;
+        this.cardBrand = cardBrand;
+        this.transactionTimestamp = transactionTimestamp;
+        this.maskedPan = maskedPan;
+        this.pinUsed = pinUsed;
+        this.responseCode = responseCode;
+        this.approvalCode = approvalCode;
+        this.processed = processed;
     }
 
-    public CardType getCardType() {
-        return cardType;
+    public UUID getGuid() {
+        return guid;
     }
 
-    public void setCardType(CardType cardType) {
-        this.cardType = cardType;
+    public void setGuid(UUID guid) {
+        this.guid = guid;
     }
 
-    public String getCardNumber() {
-        return cardNumber;
-    }
 
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public String getTransactionNumber() {
-        return transactionNumber;
-    }
-
-    public void setTransactionNumber(String transactionNumber) {
-        this.transactionNumber = transactionNumber;
-    }
-
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
-    public TransactionType getTransactionType() {
-        return transactionType;
+    public TrxType getTrxType() {
+        return trxType;
     }
 
-    public void setTransactionType(TransactionType transactionType) {
-        this.transactionType = transactionType;
+    public void setTrxType(TrxType trxType) {
+        this.trxType = trxType;
     }
 
-    public boolean isSuccess() {
-        return success;
+    public int getInstallmentsNumber() {
+        return installmentsNumber;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setInstallmentsNumber(int installmentsNumber) {
+        this.installmentsNumber = installmentsNumber;
     }
 
+    public InstallmentsCreditor getInstallmentsCreditor() {
+        return installmentsCreditor;
+    }
+
+    public void setInstallmentsCreditor(InstallmentsCreditor installmentsCreditor) {
+        this.installmentsCreditor = installmentsCreditor;
+    }
+
+    public CardBrand getCardBrand() {
+        return cardBrand;
+    }
+
+    public void setCardBrand(CardBrand cardBrand) {
+        this.cardBrand = cardBrand;
+    }
+
+    public LocalDateTime getTransactionTimestamp() {
+        return transactionTimestamp;
+    }
+
+    public void setTransactionTimestamp(LocalDateTime transactionTimestamp) {
+        this.transactionTimestamp = transactionTimestamp;
+    }
+
+    public String getMaskedPan() {
+        return maskedPan;
+    }
+
+    public void setMaskedPan(String maskedPan) {
+        this.maskedPan = maskedPan;
+    }
+
+    public boolean isPinUsed() {
+        return pinUsed;
+    }
+
+    public void setPinUsed(boolean pinUsed) {
+        this.pinUsed = pinUsed;
+    }
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public String getApprovalCode() {
+        return approvalCode;
+    }
+
+    public void setApprovalCode(String approvalCode) {
+        this.approvalCode = approvalCode;
+    }
+
+    public Boolean getProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
 }
