@@ -18,8 +18,11 @@ public class ReportService {
         this.client = client;
     }
 
-    public SuccessReportData getSuccessReport(){
-        List<Transaction> transactions = client.getTransactions();
+    public SuccessReportData getSuccessReport(String authorizationHeader){
+        List<Transaction> transactions = client.getTransactions(authorizationHeader);
+
+        if(transactions == null)
+            return new SuccessReportData(0, 0, 0, 0);
 
         int successfulTransactions = (int) transactions.stream()
                 .filter(t -> SUCCESS_CODES.contains(t.getResponseCode()))

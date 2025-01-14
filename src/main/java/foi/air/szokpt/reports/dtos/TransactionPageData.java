@@ -1,4 +1,4 @@
-package foi.air.szokpt.reports.dtos.responses;
+package foi.air.szokpt.reports.dtos;
 
 import foi.air.szokpt.reports.entities.Transaction;
 

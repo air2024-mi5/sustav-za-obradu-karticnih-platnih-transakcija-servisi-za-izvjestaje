@@ -27,4 +27,9 @@ public class GlobalExceptionHandler {
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 
+    @ExceptionHandler(TokenValidationException.class)
+    public ResponseEntity<Object> handleValidationException(TokenValidationException ex) {
+        return new ResponseEntity<>(ApiResponseUtil.failure("Invalid or expired token."),
+                HttpStatus.UNAUTHORIZED);
+    }
 }
