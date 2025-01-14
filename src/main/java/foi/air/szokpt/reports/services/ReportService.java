@@ -1,6 +1,6 @@
 package foi.air.szokpt.reports.services;
 
-import foi.air.szokpt.reports.clients.MockTransactionClient;
+import foi.air.szokpt.reports.clients.TransactionClient;
 import foi.air.szokpt.reports.dtos.responses.SuccessReportData;
 import foi.air.szokpt.reports.entities.Transaction;
 import org.springframework.stereotype.Service;
@@ -12,14 +12,14 @@ import static foi.air.szokpt.reports.util.ResponseCodeConstants.*;
 @Service
 public class ReportService {
 
-    private final MockTransactionClient client;
+    private final TransactionClient client;
 
-    public ReportService(MockTransactionClient client) {
+    public ReportService(TransactionClient client) {
         this.client = client;
     }
 
     public SuccessReportData getSuccessReport(){
-        List<Transaction> transactions = client.getUnprocessedTransactions();
+        List<Transaction> transactions = client.getTransactions();
 
         int successfulTransactions = (int) transactions.stream()
                 .filter(t -> SUCCESS_CODES.contains(t.getResponseCode()))
