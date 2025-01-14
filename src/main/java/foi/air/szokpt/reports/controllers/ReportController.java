@@ -1,6 +1,7 @@
 package foi.air.szokpt.reports.controllers;
 
 import foi.air.szokpt.reports.dtos.responses.ApiResponse;
+import foi.air.szokpt.reports.dtos.responses.CardBrandsReportData;
 import foi.air.szokpt.reports.dtos.responses.SuccessReportData;
 import foi.air.szokpt.reports.services.ReportService;
 import foi.air.szokpt.reports.util.ApiResponseUtil;
@@ -37,4 +38,14 @@ public class ReportController {
         );
     }
 
+    @GetMapping("/card-brands")
+    public ResponseEntity<ApiResponse<CardBrandsReportData>> cardBrandReport(
+            @RequestHeader("Authorization") String authorizationHeader
+    ){
+        authorizer.verifyToken(authorizationHeader);
+        CardBrandsReportData data = reportService.getCardBrandsReport(authorizationHeader);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ApiResponseUtil.successWithData("Successful login", data)
+        );
+    }
 }
