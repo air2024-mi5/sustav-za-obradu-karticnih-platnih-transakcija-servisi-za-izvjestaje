@@ -3,10 +3,15 @@ package foi.air.szokpt.reports.services;
 import foi.air.szokpt.reports.clients.TransactionClient;
 import foi.air.szokpt.reports.dtos.responses.CardBrandsReportData;
 import foi.air.szokpt.reports.dtos.responses.SuccessReportData;
+import foi.air.szokpt.reports.dtos.responses.TransactionsPerDayReportData;
 import foi.air.szokpt.reports.entities.Transaction;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static foi.air.szokpt.reports.util.ResponseCodeConstants.*;
 
@@ -19,10 +24,12 @@ public class ReportService {
         this.client = client;
     }
 
-    public SuccessReportData getSuccessReport(String authorizationHeader){
-        List<Transaction> transactions = client.getTransactions(authorizationHeader);
+    public SuccessReportData getSuccessReport(String authorizationHeader) {
+        LocalDateTime after = LocalDate.now().atStartOfDay();
+        LocalDateTime before = LocalDateTime.now();
+        List<Transaction> transactions = client.getTransactions(authorizationHeader, after, before);
 
-        if(transactions == null)
+        if (transactions == null)
             return new SuccessReportData(0, 0, 0, 0);
 
         int successfulTransactions = (int) transactions.stream()
@@ -46,10 +53,13 @@ public class ReportService {
         );
     }
 
-    public CardBrandsReportData getCardBrandsReport(String authorizationHeader){
-        List<Transaction> transactions = client.getTransactions(authorizationHeader);
+    public CardBrandsReportData getCardBrandsReport(String authorizationHeader) {
+        LocalDateTime after = LocalDate.now().atStartOfDay();
+        LocalDateTime before = LocalDateTime.now();
 
-        if(transactions == null)
+        List<Transaction> transactions = client.getTransactions(authorizationHeader, after, before);
+
+        if (transactions == null)
             return new CardBrandsReportData(0, 0, 0, 0, 0, 0, 0);
 
         int visaCount = (int) transactions.stream()
@@ -85,6 +95,37 @@ public class ReportService {
                 maestroCount,
                 amexCount
         );
+    }
+
+    public TransactionsPerDayReportData getTransactionsPerDayReport(String authorizationHeader) {
+        LocalDateTime after = LocalDate.now().minusDays(6).atStartOfDay();
+        LocalDateTime before = LocalDateTime.now();
+        List<Transaction> transactions = client.getTransactions(authorizationHeader, after, before);
+
+        if (transactions == null) {
+            Map<LocalDateTime, Integer> emptyMap = new TreeMap<>();
+            for (int i = 6; i >= 0; i--) {
+                LocalDateTime date = LocalDate.now().minusDays(i).atStartOfDay();
+                emptyMap.put(date, 0);
+            }
+            return new TransactionsPerDayReportData(0, emptyMap);
+        }
+
+        Map<LocalDateTime, Integer> transactionsPerDay = new TreeMap<>();
+
+        for (Transaction transaction : transactions) {
+            LocalDateTime transactionDate = transaction.getTransactionTimestamp().toLocalDate().atStartOfDay();
+            transactionsPerDay.put(transactionDate, transactionsPerDay.getOrDefault(transactionDate, 0) + 1);
+        }
+
+        for (int i = 6; i >= 0; i--) {
+            LocalDateTime date = LocalDate.now().minusDays(i).atStartOfDay();
+            transactionsPerDay.putIfAbsent(date, 0);
+        }
+
+        int totalTransactions = transactions.size();
+
+        return new TransactionsPerDayReportData(totalTransactions, transactionsPerDay);
     }
 
 }
