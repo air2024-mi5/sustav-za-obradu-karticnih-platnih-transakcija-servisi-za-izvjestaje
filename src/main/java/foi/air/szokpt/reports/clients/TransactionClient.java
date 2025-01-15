@@ -9,7 +9,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,9 +24,7 @@ public class TransactionClient {
         this.restTemplate = restTemplate;
     }
 
-    public List<Transaction> getTransactions(String authorizationHeader) {
-        LocalDateTime after = LocalDate.now().atStartOfDay();
-        LocalDateTime before = LocalDateTime.now();
+    public List<Transaction> getTransactions(String authorizationHeader, LocalDateTime after, LocalDateTime before) {
 
         String url = baseUrl + "/transactions" + "?after=" + after + "&before=" + before;
 
