@@ -3,6 +3,7 @@ package foi.air.szokpt.reports.controllers;
 import foi.air.szokpt.reports.dtos.responses.ApiResponse;
 import foi.air.szokpt.reports.dtos.responses.CardBrandsReportData;
 import foi.air.szokpt.reports.dtos.responses.SuccessReportData;
+import foi.air.szokpt.reports.dtos.responses.TransactionsPerDayReportData;
 import foi.air.szokpt.reports.services.ReportService;
 import foi.air.szokpt.reports.util.ApiResponseUtil;
 import foi.air.szokpt.reports.util.Authorizer;
@@ -45,7 +46,18 @@ public class ReportController {
         authorizer.verifyToken(authorizationHeader);
         CardBrandsReportData data = reportService.getCardBrandsReport(authorizationHeader);
         return ResponseEntity.status(HttpStatus.OK).body(
-                ApiResponseUtil.successWithData("Successful login", data)
+                ApiResponseUtil.successWithData("Card brands data successfully fetched.", data)
+        );
+    }
+
+    @GetMapping("/transactions-per-day")
+    public ResponseEntity<ApiResponse<TransactionsPerDayReportData>> transactionsPerDayReport(
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        authorizer.verifyToken(authorizationHeader);
+        TransactionsPerDayReportData data = reportService.getTransactionsPerDayReport(authorizationHeader);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ApiResponseUtil.successWithData("Transactions per day data successfully fetched.", data)
         );
     }
 }
