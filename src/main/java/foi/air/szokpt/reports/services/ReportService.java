@@ -25,7 +25,7 @@ public class ReportService {
     }
 
     public SuccessReportData getSuccessReport(String authorizationHeader) {
-        LocalDateTime after = LocalDate.now().atStartOfDay();
+        LocalDateTime after = LocalDate.now().minusDays(6).atStartOfDay();
         LocalDateTime before = LocalDateTime.now();
         List<Transaction> transactions = client.getTransactions(authorizationHeader, after, before);
 
@@ -54,7 +54,7 @@ public class ReportService {
     }
 
     public CardBrandsReportData getCardBrandsReport(String authorizationHeader) {
-        LocalDateTime after = LocalDate.now().atStartOfDay();
+        LocalDateTime after = LocalDate.now().minusDays(6).atStartOfDay();
         LocalDateTime before = LocalDateTime.now();
 
         List<Transaction> transactions = client.getTransactions(authorizationHeader, after, before);
