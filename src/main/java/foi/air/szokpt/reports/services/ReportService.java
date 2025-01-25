@@ -89,9 +89,9 @@ public class ReportService {
         return new CardBrandsReportData(
                 transactions.size(),
                 visaCount,
+                mastercardCount,
                 dinersCount,
                 discoverCount,
-                mastercardCount,
                 maestroCount,
                 amexCount
         );
